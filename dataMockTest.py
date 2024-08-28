@@ -8,7 +8,7 @@ import copy
 ws_url = "wss://localhost:7070/com.emotiv.son"
 
 # Load the data sample
-with open('/Users/sondh/data/data_sample.json') as f:
+with open('./data_sample.json') as f:
     data_sample = json.load(f)
 
 # Helper function to generate consumer insights data
@@ -49,7 +49,7 @@ def generate_yearly_data():
     for i in range(52):
         start = start_of_year + datetime.timedelta(weeks=i)
         end = start + datetime.timedelta(weeks=1)
-        print("son", i, start, end) 
+        # print("son", i, start, end)
         data_list.append(generate_consumer_data("consumerMetrics:week", start, end))
 
     # Months
@@ -99,6 +99,6 @@ consumer_data = generate_yearly_data()
 #     file.write('\n')
 
 # Save the data via WebSocket
-cortex_token = "YOUR_CORTEX_TOKEN"
+cortex_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6ImNvbS5lbW90aXYuY29uc3VtZXJhcHAiLCJhcHBWZXJzaW9uIjoiMS4wLjAiLCJleHAiOjE3MjQ4NDk3NTYsIm5iZiI6MTcyNDU5MDU1NiwidXNlcklkIjoiYjE1MjMwOGMtZDE5NS00NjU0LWE5NjYtOWViMzBhZDVmYjFmIiwidXNlcm5hbWUiOiJzb25kb2hvOTciLCJ2ZXJzaW9uIjoiMi4wIn0.4Msx1Awhsn-E8kCtrcnUjnl35TsCR9p-iGqNPo0K39g"
 result = save_consumer_insights(consumer_data, cortex_token)
 print("Result:", result)

@@ -5,17 +5,20 @@ import csv
 import json
 
 ws_url = "wss://localhost:7070/com.emotiv.son"
-cortex_token = "YOUR_CORTEX_TOKEN"
+
+cortex_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6ImNvbS5lbW90aXYuY29uc3VtZXJhcHAiLCJhcHBWZXJzaW9uIjoiMS4wLjAiLCJleHAiOjE3MjQ5MzYxMzcsIm5iZiI6MTcyNDY3NjkzNywidXNlcklkIjoiYjE5YWE1MmEtMDk0Zi00NzAwLWIzYzYtZWZiMmMxMzEwYjJkIiwidXNlcm5hbWUiOiJzb25kb2hvOTciLCJ2ZXJzaW9uIjoiMi4wIn0.UutQystUYyWfwvGYQsEonNTks3Ibt8CIDrn-cX3JruU"
+num_tests = 10
 
 api_methods = [
     {
         "method": "queryDaySnapshots",
         "params": {
-            "startDate": "2024-07-22",
-            "endDate": "2024-08-22",
+            "startDate": "2024-08-22",
+            "endDate": "2024-10-22",
             "cortexToken": cortex_token
         }
-    },
+    }
+    ,
     {
         "method": "queryHourSnapshots",
         "params": {
@@ -23,21 +26,24 @@ api_methods = [
             "endDate": "2024-08-22",
             "cortexToken": cortex_token
         }
-    },
+    }
+    ,
     {
         "method": "queryWeekSnapshots",
         "params": {
             "cortexToken": cortex_token
         }
-    },
+    }
+    ,
     {
         "method": "querySnapshotsOfDate",
         "params": {
-            "startDate": "2024-07-22",
-            "endDate": "2024-08-22",
+            "startDate": "2024-09-01",
+            "endDate": "2024-09-02",
             "cortexToken": cortex_token
         }
-    },
+    }
+    ,
     {
         "method": "queryFirstSnapshot",
         "params": {
@@ -65,7 +71,7 @@ async def send_request(ws, method, params):
 
 async def benchmark_api(ws, method, params):
     times = []
-    for _ in range(10):
+    for _ in range(num_tests):
         elapsed_time = await send_request(ws, method, params)
         if elapsed_time is not None:
             times.append(elapsed_time)
@@ -86,7 +92,7 @@ async def main():
         
         with open('benchmark_results.csv', 'w', newline='') as csvfile:
             csvwriter = csv.writer(csvfile)
-            header = ['Method', 'Params'] + [f'Time_{i+1}' for i in range(10)] + ['Average_Time']
+            header = ['Method', 'Params'] + [f'Time_{i+1} (sec)' for i in range(num_tests)] + ['Average_Time (sec)']
             csvwriter.writerow(header)
             csvwriter.writerows(results)
 
